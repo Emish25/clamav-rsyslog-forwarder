@@ -1,0 +1,6 @@
+---
+- name: Deploy ClamAV rsyslog forwarder
+  hosts: clamav_nodes
+  become: yes
+  roles:
+    - clamav_rsyslog
