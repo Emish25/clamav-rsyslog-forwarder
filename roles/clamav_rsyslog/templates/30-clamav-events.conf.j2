@@ -1,0 +1,11 @@
+module(load="imfile")
+
+input(
+  type="imfile"
+  File="/var/log/clamav/clamav-events.log"
+  Tag="clamav"
+  Severity="info"
+  Facility="local5"
+)
+
+local5.* @@10.10.0.14:514
