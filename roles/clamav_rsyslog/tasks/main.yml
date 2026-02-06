@@ -1,0 +1,49 @@
+---
+- name: Ensure rsyslog is installed
+  package:
+    name: rsyslog
+    state: present
+
+- name: Ensure ClamAV log directory permissions
+  file:
+    path: /var/log/clamav
+    owner: syslog
+    group: syslog
+    mode: "0750"
+    recurse: yes
+
+- name: Ensure clamav-events.log permissions
+  file:
+    path: /var/log/clamav/clamav-events.log
+    owner: syslog
+    group: syslog
+    mode: "0640"
+    state: touch
+
+- name: Deploy rsyslog ClamAV configuration
+  template:
+    src: 30-clamav-events.conf.j2
+    dest: /etc/rsyslog.d/30-clamav-events.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart rsyslog
+```
+
+4. **"Commit changes"**
+
+### 3. Créez `roles/clamav_rsyslog/templates/30-clamav-events.conf.j2`
+
+1. **"Add file"** → **"Create new file"**
+2. Nom : `roles/clamav_rsyslog/templates/30-clamav-events.conf.j2`
+3. Contenu :
+```
+module(load="imfile")
+input(
+  type="imfile"
+  File="/var/log/clamav/clamav-events.log"
+  Tag="clamav"
+  Severity="info"
+  Facility="local5"
+)
+local5.* @@10.10.0.14:514
