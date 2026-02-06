@@ -28,22 +28,3 @@
     group: root
     mode: "0644"
   notify: Restart rsyslog
-```
-
-4. **"Commit changes"**
-
-### 3. Créez `roles/clamav_rsyslog/templates/30-clamav-events.conf.j2`
-
-1. **"Add file"** → **"Create new file"**
-2. Nom : `roles/clamav_rsyslog/templates/30-clamav-events.conf.j2`
-3. Contenu :
-```
-module(load="imfile")
-input(
-  type="imfile"
-  File="/var/log/clamav/clamav-events.log"
-  Tag="clamav"
-  Severity="info"
-  Facility="local5"
-)
-local5.* @@10.10.0.14:514
