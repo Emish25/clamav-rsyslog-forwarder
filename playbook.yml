@@ -2,5 +2,16 @@
 - name: Deploy ClamAV rsyslog forwarder
   hosts: clamav_nodes
   become: yes
+  become_method: sudo
+  become_user: root
+  become_flags: '-H'
+
+  vars:
+    ansible_remote_tmp: /tmp/.ansible
+
+  environment:
+    ANSIBLE_REMOTE_TEMP: /tmp/.ansible
+    ANSIBLE_HOST_KEY_CHECKING: "False"
+
   roles:
-    - clamav_rsyslog
+    - clamav_rsyslog   # ou le nom de ton role ClamAV
